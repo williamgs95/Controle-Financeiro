@@ -1,16 +1,17 @@
-//const db = require('../models/index.js');
+const transactionModels = require('../models/TransactionModel.js');
 //const { logger } = require('../config/logger.js');
 
-const TransactionModel = require('../models/TransactionModel');
-
-const Grades = TransactionModel;
-
 const create = async (req, res) => {
-  const grade = new Grades({
-    name: req.body.name,
-    subject: req.body.subject,
-    type: req.body.type,
+  const grade = new transactionModels({
+    description: req.body.description,
     value: req.body.value,
+    category: req.body.category,
+    year: req.body.year,
+    month: req.body.month,
+    day: req.body.day,
+    yearMonth: req.body.yearMonth,
+    yearMonthDay: req.body.yearMonthDay,
+    type: req.body.type,
   });
   try {
     const data = await grade.save();
@@ -25,32 +26,31 @@ const create = async (req, res) => {
   }
 };
 
-const findAll = async (req, res) => {
-  res.send('grade');
-  /* const name = req.query.name;
-  //condicao para o filtro no findAll
-  var condition = name
-    ? { name: { $regex: new RegExp(name), $options: 'i' } }
-    : {};
-
-  try {
-    const data = await Grades.find(condition);
-
-    res.send(data);
-    logger.info(`GET /grade`);
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: error.message || 'Erro ao listar todos os documentos' });
-    //logger.error(`GET /grade - ${JSON.stringify(error.message)}`);
-  } */
+const findAllOfMonth = async (req, res) => {
+  const searchDate = await req.query.period;
+  if (!searchDate) {
+    res.send(
+      '"Error": "É necessário informar o parâmetro "period", cujo valor deve estar no formato yyyy-mm"'
+    );
+  } else {
+    try {
+      const data = await transactionModels.find({ yearMonth: searchDate });
+      res.send(data);
+      logger.info(`GET /transaction`);
+    } catch (error) {
+      res.status(500).send({
+        message: error.message || 'Erro ao listar todos os documentos',
+      });
+      //logger.error(`GET /grade - ${JSON.stringify(error.message)}`);
+    }
+  }
 };
 
 const findOne = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const data = await Grades.findOne({ _id: id });
+    const data = await transactionModels.findOne({ _id: id });
 
     if (!data) {
       res.status(404).send('Nenhum registro encontrado para o Id informado');
@@ -73,9 +73,13 @@ const update = async (req, res) => {
   const update = req.body;
 
   try {
-    const data = await Grades.findByIdAndUpdate({ _id: id }, req.body, {
-      new: true,
-    });
+    const data = await transactionModels.findByIdAndUpdate(
+      { _id: id },
+      update,
+      {
+        new: true,
+      }
+    );
     if (!data) {
       res
         .status(404)
@@ -94,7 +98,7 @@ const remove = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const data = await Grades.findByIdAndRemove({ _id: id });
+    const data = await transactionModels.findByIdAndRemove({ _id: id });
 
     if (!data) {
       res
@@ -114,7 +118,7 @@ const remove = async (req, res) => {
 
 const removeAll = async (req, res) => {
   try {
-    const data = await Grades.deleteMany({});
+    const data = await transactionModels.deleteMany({});
     if (!data) {
       res.status(404).send('Nenhum encontramos nenhum registro para excluir');
     } else {
@@ -129,7 +133,7 @@ const removeAll = async (req, res) => {
 
 module.exports = {
   create,
-  findAll,
+  findAllOfMonth,
   findOne,
   update,
   remove,

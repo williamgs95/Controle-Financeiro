@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const routes = require('./routes/routes');
 const path = require('path');
 const dotenv = require('dotenv');
-
+const url = require('./controllers/index.js');
 /**
  * Faz a leitura do arquivo
  * ".env" por padrão
@@ -38,11 +38,10 @@ app.use('/api/transaction', routes.app);
 /**
  * Conexão ao Banco de Dados
  */
-const { DB_CONNECTION } = process.env;
-
+//const {url} = db
 console.log('Iniciando conexão ao MongoDB...');
 mongoose.connect(
-  DB_CONNECTION,
+  process.env.DB_CONNECTION,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

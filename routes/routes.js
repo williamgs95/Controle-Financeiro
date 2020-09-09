@@ -1,8 +1,8 @@
 const express = require('express');
-const transactionRouter = express.Router();
+//const transactionRouter = express.Router();
 const {
   create,
-  findAll,
+  findAllOfMonth,
   findOne,
   update,
   remove,
@@ -11,14 +11,11 @@ const {
 
 const app = express();
 
-app.get('/', async (req, res) => {
-  res.send('OK');
-});
-app.post('/grade', create);
-app.get('/grade', findAll);
-app.get('/grade/:id', findOne);
-app.put('/grade/:id', update);
-app.delete('/grade/:id', remove);
-app.delete('/grade', removeAll);
+app.post('/newTransaction', create);
+app.get('', findAllOfMonth);
+app.get('/find/:id', findOne);
+app.put('/update/:id', update);
+app.delete('/delete/:id', remove);
+app.delete('', removeAll);
 
-module.exports = { transactionRouter, app };
+module.exports = { app };

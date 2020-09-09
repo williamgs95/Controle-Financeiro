@@ -1,23 +1,43 @@
 const mongoose = require('mongoose');
 
 let schema = mongoose.Schema({
-  description: String,
-  value: Number,
-  category: String,
-  year: Number,
-  month: Number,
-  day: Number,
-  yearMonth: String,
-  yearMonthDay: String,
-  type: String,
+  description: {
+    type: String,
+    require: true,
+  },
+  value: {
+    type: Number,
+    require: true,
+  },
+  category: {
+    type: String,
+    require: true,
+  },
+  year: {
+    type: Number,
+    require: true,
+  },
+  month: {
+    type: Number,
+    require: true,
+  },
+  day: {
+    type: Number,
+    require: true,
+  },
+  yearMonth: {
+    type: String,
+    require: true,
+  },
+  yearMonthDay: {
+    type: String,
+    require: true,
+  },
+  type: {
+    type: String,
+    require: true,
+  },
 });
-schema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject();
 
-  object.id = _id;
-
-  return object;
-});
-const TransactionModel = mongoose.model('transaction', schema, 'transaction');
-
+const TransactionModel = mongoose.model('transactions', schema);
 module.exports = TransactionModel;

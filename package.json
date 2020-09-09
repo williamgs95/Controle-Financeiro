@@ -25,5 +25,7 @@
   },
   "engines": {
     "node": "12.18.2"
-  }
+  },
+  "repository": "https://github.com/williamgs95/Controle-Financeiro.git",
+  "author": "William <williamgs95@hotmail.com>"
 }
